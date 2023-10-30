@@ -10,6 +10,7 @@ import sqlalchemy
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
+import models
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -73,3 +74,14 @@ class BaseModel:
     def delete(self):
         """delete the current instance from the storage"""
         models.storage.delete(self)
+
+    def to_dict(self, save_password=False):
+        """Returns a dictionary representation of the BaseModel instance."""
+        base_dict = {
+            'id': self.id,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
+        }
+        if save_password:
+            base_dict['password'] = self.password
+        return base_dict    
